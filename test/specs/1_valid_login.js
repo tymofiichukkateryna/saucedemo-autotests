@@ -1,8 +1,19 @@
-import LoginPage from '../pageobjects/login.page.js';
-describe('TC-1', () => {
+import loginPage from '../pageobjects/login.page.js';
+
+describe('Login functionality', () => {
+
     it('should login with valid credentials', async () => {
-        await LoginPage.open();
-        await LoginPage.login('standard_user', 'secret_sauce');
-        await expect(browser).toHaveUrl(expect.stringContaining('/inventory.html'));
+
+        await loginPage.open();
+
+        await loginPage.login(
+            'standard_user',
+            'secret_sauce'
+        );
+
+        await expect(browser)
+            .toHaveUrl(
+                expect.stringContaining('/inventory.html')
+            );
     });
 });

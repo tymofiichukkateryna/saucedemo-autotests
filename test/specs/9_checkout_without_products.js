@@ -1,10 +1,24 @@
-import LoginPage from '../pageobjects/login.page.js';
-describe('TC-9', () => {
-    it('should not allow checkout with empty cart', async () => {
-        await LoginPage.open();
-        await LoginPage.login('standard_user', 'secret_sauce');
-        await $('.shopping_cart_link').click();
-        await $('#checkout').click();
-        await expect(browser).toHaveUrl(expect.stringContaining('/cart.html'));
+import loginPage from '../pageobjects/login.page.js';
+import cartPage from '../pageobjects/cart.page.js';
+
+describe('Checkout validation', () => {
+
+    it('should NOT allow checkout with empty cart', async () => {
+
+        await loginPage.open();
+
+        await loginPage.login(
+            'standard_user',
+            'secret_sauce'
+        );
+
+        await cartPage.openCart();
+
+        await cartPage.clickCheckout();
+
+        await expect(browser)
+            .toHaveUrl(
+                expect.stringContaining('/cart.html')
+            );
     });
 });

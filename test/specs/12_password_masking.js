@@ -1,7 +1,16 @@
-import LoginPage from '../pageobjects/login.page.js';
-describe('TC-12', () => {
-    it('should mask the password field', async () => {
-        await LoginPage.open();
-        await expect(LoginPage.inputPassword).toHaveAttribute('type', 'password');
+import loginPage from '../pageobjects/login.page.js';
+
+describe('Login form functionality', () => {
+
+    it('should mask password field', async () => {
+
+        await loginPage.open();
+
+        await expect(
+            loginPage.inputPassword
+        ).toHaveAttribute(
+            'type',
+            'password'
+        );
     });
 });

@@ -1,14 +1,40 @@
-import LoginPage from '../pageobjects/login.page.js';
-describe('TC-19', () => {
+import loginPage from '../pageobjects/login.page.js';
+import inventoryPage from '../pageobjects/inventory.page.js';
+import cartPage from '../pageobjects/cart.page.js';
+import checkoutPage from '../pageobjects/checkout.page.js';
+
+describe('Order summary functionality', () => {
+
     it('should show positive total price', async () => {
-        await LoginPage.open();
-        await LoginPage.login('standard_user', 'secret_sauce');
-        await $('.btn_inventory').click();
-        await $('.shopping_cart_link').click();
-        await $('#checkout').click();
-        await $('#first-name').setValue('K'); await $('#last-name').setValue('Q'); await $('#postal-code').setValue('0');
-        await $('#continue').click();
-        const total = await $('.summary_total_label').getText();
-        expect(parseFloat(total.replace('Total: $', ''))).toBeGreaterThan(0);
+
+        await loginPage.open();
+
+        await loginPage.login(
+            'standard_user',
+            'secret_sauce'
+        );
+
+        await inventoryPage.addFirstItemToCart();
+
+        await cartPage.openCart();
+
+        await cartPage.clickCheckout();
+
+        await checkoutPage.fillCheckoutInfo(
+            'K',
+            'Q',
+            '12345'
+        );
+
+        await checkoutPage.continueCheckout();
+
+        const total =
+            await checkoutPage.getTotalPriceText();
+
+        expect(
+            parseFloat(
+                total.replace('Total: $', '')
+            )
+        ).toBeGreaterThan(0);
     });
 });

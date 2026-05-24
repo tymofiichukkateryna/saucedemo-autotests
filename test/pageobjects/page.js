@@ -1,7 +1,19 @@
-import { browser } from '@wdio/globals'
+import { browser } from '@wdio/globals';
 
 export default class SaucedemoPage {
+
     async open(path = '') {
-        return await browser.url(`https://www.saucedemo.com/${path}`);
+
+        await browser.url(
+            `https://www.saucedemo.com/${path}`
+        );
+    }
+
+    async getCurrentUrl() {
+        return await browser.getUrl();
+    }
+
+    async getWindowHandles() {
+        return await browser.getWindowHandles();
     }
 }

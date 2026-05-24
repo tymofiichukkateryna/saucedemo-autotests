@@ -1,10 +1,23 @@
-import LoginPage from '../pageobjects/login.page.js';
-describe('TC-15', () => {
-    it('should open product details and go back', async () => {
-        await LoginPage.open();
-        await LoginPage.login('standard_user', 'secret_sauce');
-        await $('.inventory_item_name').click();
-        await $('#back-to-products').click();
-        await expect($('.title')).toHaveText('Products');
+import loginPage from '../pageobjects/login.page.js';
+import inventoryPage from '../pageobjects/inventory.page.js';
+
+describe('Product details functionality', () => {
+
+    it('should open product details page and go back', async () => {
+
+        await loginPage.open();
+
+        await loginPage.login(
+            'standard_user',
+            'secret_sauce'
+        );
+
+        await inventoryPage.openFirstProduct();
+
+        await inventoryPage.goBackToProducts();
+
+        expect(
+            await inventoryPage.getTitleText()
+        ).toContain('Products');
     });
 });

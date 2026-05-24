@@ -1,14 +1,38 @@
-import LoginPage from '../pageobjects/login.page.js';
-describe('TC-18', () => {
-    it('should proceed with valid info', async () => {
-        await LoginPage.open();
-        await LoginPage.login('standard_user', 'secret_sauce');
-        await $('.shopping_cart_link').click();
-        await $('#checkout').click();
-        await $('#first-name').setValue('Kateryna');
-        await $('#last-name').setValue('QA');
-        await $('#postal-code').setValue('58000');
-        await $('#continue').click();
-        await expect(browser).toHaveUrl(expect.stringContaining('/checkout-step-two.html'));
+import loginPage from '../pageobjects/login.page.js';
+import inventoryPage from '../pageobjects/inventory.page.js';
+import cartPage from '../pageobjects/cart.page.js';
+import checkoutPage from '../pageobjects/checkout.page.js';
+
+describe('Checkout form functionality', () => {
+
+    it('should proceed with valid checkout information', async () => {
+
+        await loginPage.open();
+
+        await loginPage.login(
+            'standard_user',
+            'secret_sauce'
+        );
+
+        await inventoryPage.addFirstItemToCart();
+
+        await cartPage.openCart();
+
+        await cartPage.clickCheckout();
+
+        await checkoutPage.fillCheckoutInfo(
+            'Kateryna',
+            'QA',
+            '58000'
+        );
+
+        await checkoutPage.continueCheckout();
+
+        await expect(browser)
+            .toHaveUrl(
+                expect.stringContaining(
+                    '/checkout-step-two.html'
+                )
+            );
     });
 });

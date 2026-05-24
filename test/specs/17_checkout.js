@@ -1,10 +1,27 @@
-import LoginPage from '../pageobjects/login.page.js';
-describe('TC-17', () => {
+import loginPage from '../pageobjects/login.page.js';
+import inventoryPage from '../pageobjects/inventory.page.js';
+import cartPage from '../pageobjects/cart.page.js';
+import checkoutPage from '../pageobjects/checkout.page.js';
+
+describe('Checkout navigation', () => {
+
     it('should navigate to checkout step one', async () => {
-        await LoginPage.open();
-        await LoginPage.login('standard_user', 'secret_sauce');
-        await $('.shopping_cart_link').click();
-        await $('#checkout').click();
-        await expect($('.title')).toHaveText('Checkout: Your Information');
+
+        await loginPage.open();
+
+        await loginPage.login(
+            'standard_user',
+            'secret_sauce'
+        );
+
+        await inventoryPage.addFirstItemToCart();
+
+        await cartPage.openCart();
+
+        await cartPage.clickCheckout();
+
+        expect(
+            await checkoutPage.getCheckoutTitleText()
+        ).toContain('Checkout');
     });
 });

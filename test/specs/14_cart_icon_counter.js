@@ -1,9 +1,21 @@
-import LoginPage from '../pageobjects/login.page.js';
-describe('TC-14', () => {
+import loginPage from '../pageobjects/login.page.js';
+import inventoryPage from '../pageobjects/inventory.page.js';
+
+describe('Cart functionality', () => {
+
     it('should increment cart badge', async () => {
-        await LoginPage.open();
-        await LoginPage.login('standard_user', 'secret_sauce');
-        await $$('.btn_inventory')[0].click();
-        await expect($('.shopping_cart_badge')).toHaveText('1');
+
+        await loginPage.open();
+
+        await loginPage.login(
+            'standard_user',
+            'secret_sauce'
+        );
+
+        await inventoryPage.addFirstItemToCart();
+
+        expect(
+            await inventoryPage.getCartBadgeText()
+        ).toBe('1');
     });
 });

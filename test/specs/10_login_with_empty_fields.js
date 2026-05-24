@@ -1,8 +1,15 @@
-import LoginPage from '../pageobjects/login.page.js';
-describe('TC-10', () => {
-    it('should show error for empty fields', async () => {
-        await LoginPage.open();
-        await LoginPage.btnSubmit.click();
-        await expect(LoginPage.errorContainer).toHaveText(expect.stringContaining('Username is required'));
+import loginPage from '../pageobjects/login.page.js';
+
+describe('Login validation', () => {
+
+    it('should show error for empty login fields', async () => {
+
+        await loginPage.open();
+
+        await loginPage.clickLoginButton();
+
+        expect(
+            await loginPage.getErrorText()
+        ).toContain('Username is required');
     });
 });

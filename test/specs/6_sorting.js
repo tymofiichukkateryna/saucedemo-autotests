@@ -1,20 +1,51 @@
-import LoginPage from '../pageobjects/login.page.js';
+import loginPage from '../pageobjects/login.page.js';
+import inventoryPage from '../pageobjects/inventory.page.js';
 
-describe('TC-6', () => {
-    it('should sort products by price low to high', async () => {
-        await LoginPage.open();
-        await LoginPage.login('standard_user', 'secret_sauce');
-        
-        await $('.product_sort_container').selectByAttribute('value', 'lohi');
+describe('Sorting functionality', () => {
 
-        const priceElements = await $$('.inventory_item_price');
-        const prices = [];
-        
-        for (const el of priceElements) {
-            const text = await el.getText();
-            prices.push(parseFloat(text.replace('$', '')));
-        }
-        const sorted = [...prices].sort((a, b) => a - b);
-        expect(prices).toEqual(sorted);
+    beforeEach(async () => {
+
+        await loginPage.open();
+
+        await loginPage.login(
+            'standard_user',
+            'secret_sauce'
+        );
     });
+
+    const sortingOptions = [
+        'az',
+        'za',
+        'lohi',
+        'hilo'
+    ];
+
+    for (const option of sortingOptions) {
+
+        it(`should sort correctly using ${option}`, async () => {
+
+            await inventoryPage.sortBy(option);
+
+            const prices =
+                await inventoryPage.getPrices();
+
+            if (option === 'lohi') {
+
+                expect(prices)
+                    .toEqual(
+                        [...prices]
+                            .sort((a, b) => a - b)
+                    );
+            }
+
+            if (option === 'hilo') {
+
+                expect(prices)
+                    .toEqual(
+                        [...prices]
+                            .sort((a, b) => b - a)
+                    );
+            }
+        });
+    }
 });

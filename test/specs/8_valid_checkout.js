@@ -1,16 +1,39 @@
-import LoginPage from '../pageobjects/login.page.js';
-describe('TC-8', () => {
-    it('should complete a valid checkout', async () => {
-        await LoginPage.open();
-        await LoginPage.login('standard_user', 'secret_sauce');
-        await $('.btn_inventory').click();
-        await $('.shopping_cart_link').click();
-        await $('#checkout').click();
-        await $('#first-name').setValue('Kateryna');
-        await $('#last-name').setValue('QA');
-        await $('#postal-code').setValue('12345');
-        await $('#continue').click();
-        await $('#finish').click();
-        await expect($('.complete-header')).toHaveText('Thank you for your order!');
+import loginPage from '../pageobjects/login.page.js';
+import inventoryPage from '../pageobjects/inventory.page.js';
+import cartPage from '../pageobjects/cart.page.js';
+import checkoutPage from '../pageobjects/checkout.page.js';
+
+describe('Checkout functionality', () => {
+
+    it('should complete valid checkout', async () => {
+
+        await loginPage.open();
+
+        await loginPage.login(
+            'standard_user',
+            'secret_sauce'
+        );
+
+        await inventoryPage
+            .addFirstItemToCart();
+
+        await cartPage.openCart();
+
+        await cartPage.clickCheckout();
+
+        await checkoutPage.fillCheckoutInfo(
+            'Kateryna',
+            'QA',
+            '12345'
+        );
+
+        await checkoutPage.continueCheckout();
+
+        await checkoutPage.finishCheckout();
+
+        expect(
+            await checkoutPage
+                .getCompleteHeaderText()
+        ).toContain('Thank you');
     });
 });

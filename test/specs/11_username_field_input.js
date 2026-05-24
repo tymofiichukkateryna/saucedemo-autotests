@@ -1,8 +1,16 @@
-import LoginPage from '../pageobjects/login.page.js';
-describe('TC-11', () => {
+import loginPage from '../pageobjects/login.page.js';
+
+describe('Login form functionality', () => {
+
     it('should allow typing in username field', async () => {
-        await LoginPage.open();
-        await LoginPage.inputUsername.setValue('test');
-        await expect(LoginPage.inputUsername).toHaveValue('test');
+
+        await loginPage.open();
+
+        await loginPage.inputUsername
+            .setValue('test');
+
+        await expect(
+            loginPage.inputUsername
+        ).toHaveValue('test');
     });
 });
